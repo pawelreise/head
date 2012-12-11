@@ -106,6 +106,10 @@ public class InstallmentPayment {
     public boolean isPrincipalPayment() {
         return isGreaterThanZero(getPrincipalPaid());
     }
+    
+    public boolean isInterestPayment() {
+        return isGreaterThanZero(getInterestPaid());
+    }
 
     private void resetPaymentComponents() {
         paymentMap.put(InstallmentComponent.PRINCIPAL, BigDecimal.ZERO);

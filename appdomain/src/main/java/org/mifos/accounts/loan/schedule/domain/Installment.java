@@ -27,6 +27,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.mifos.config.AccountingRules;
+import org.mifos.framework.util.helpers.DateUtils;
 import org.mifos.framework.util.helpers.NumberUtils;
 
 public class Installment implements Comparable<Installment> {
@@ -94,7 +96,10 @@ public class Installment implements Comparable<Installment> {
     }
 
     public void setExtraInterest(BigDecimal extraInterest) {
-        actualAmounts.put(InstallmentComponent.EXTRA_INTEREST, extraInterest);
+        if (!AccountingRules.isOverdueInterestPaidFirst() || isInterestDue()
+                || getRecentInterestPaidDate().before(DateUtils.getCurrentDateWithoutTimeStamp())) {
+            actualAmounts.put(InstallmentComponent.EXTRA_INTEREST, extraInterest);
+        }
     }
 
     public BigDecimal getMiscPenalty() {
@@ -269,6 +274,10 @@ public class Installment implements Comparable<Installment> {
 
     public Date getRecentPrincipalPaidDate() {
         return previousPayments.getRecentPrincipalPaidDate();
+    }
+    
+    public Date getRecentInterestPaidDate() {
+        return previousPayments.getRecentInterestPaidDate();
     }
 
     public void addExtraInterest(BigDecimal extraInterest) {

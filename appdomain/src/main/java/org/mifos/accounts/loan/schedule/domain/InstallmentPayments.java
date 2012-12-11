@@ -102,4 +102,14 @@ public class InstallmentPayments {
         }
         return lastPaymentDate;
     }
+    
+    public Date getRecentInterestPaidDate() {
+        Date lastPaymentDate = null;
+        for (InstallmentPayment installmentPayment : installmentPayments) {
+            if (installmentPayment.isInterestPayment()) {
+                lastPaymentDate = NumberUtils.max(lastPaymentDate, installmentPayment.getPaidDate());
+            }
+        }
+        return lastPaymentDate;
+    }
 }
